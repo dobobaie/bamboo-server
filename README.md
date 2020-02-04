@@ -2,6 +2,8 @@
 
 Bamboo server is the official rest API of the Bamboo project.   
 
+[Live bamboo server](http://164.132.106.118:5656/)  
+
 ## 📝 Requirements
 
 ### Environment variables
