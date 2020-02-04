@@ -3,8 +3,9 @@ module.exports = ({ contracts }) => router =>
     .post(
       "/create",
       async (ctx, next) =>
+        // eslint-disable-next-line
         await next(
-          await contracts(ctx).createContract(
+          await contracts.createContract(ctx)(
             ctx.authParams.user_id,
             ctx.request.fields
           )
@@ -13,8 +14,9 @@ module.exports = ({ contracts }) => router =>
     .get(
       "/autocomplete",
       async (ctx, next) =>
+        // eslint-disable-next-line
         await next({
-          list: await contracts(ctx).retrieveContractsNameByKeyword(
+          list: await contracts.retrieveContractsNameByKeyword(ctx)(
             ctx.queries.keyword
           )
         })
@@ -22,15 +24,17 @@ module.exports = ({ contracts }) => router =>
     .get(
       "/list",
       async (ctx, next) =>
+        // eslint-disable-next-line
         await next({
-          list: await contracts(ctx).retrieveAllContracts()
+          list: await contracts.retrieveAllContracts(ctx)()
         })
     )
     .get(
       "/:contract_id",
       async (ctx, next) =>
+        // eslint-disable-next-line
         await next({
-          contract: await contracts(ctx).retrieveContractById(
+          contract: await contracts.retrieveContractById(ctx)(
             ctx.params.contract_id
           )
         })
@@ -38,8 +42,9 @@ module.exports = ({ contracts }) => router =>
     .put(
       "/:contract_id",
       async (ctx, next) =>
+        // eslint-disable-next-line
         await next(
-          await contracts(ctx).updateContractById(
+          await contracts.updateContractById(ctx)(
             ctx.params.contract_id,
             ctx.request.fields
           )
@@ -48,7 +53,8 @@ module.exports = ({ contracts }) => router =>
     .delete(
       "/:contract_id",
       async (ctx, next) =>
+        // eslint-disable-next-line
         await next(
-          await contracts(ctx).deleteContractById(ctx.params.contract_id)
+          await contracts.deleteContractById(ctx)(ctx.params.contract_id)
         )
     );

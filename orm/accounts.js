@@ -1,7 +1,7 @@
 const shortid = require("shortid");
 
-module.exports = ({ knexpg }) => {
-  const createAccount = ({ email, password, phone_number, salt_key }) =>
+module.exports = function Accounts({ knexpg }) {
+  this.createAccount = ({ email, password, phone_number, salt_key }) =>
     knexpg("accounts")
       .insert({
         id: shortid.generate(),
@@ -13,9 +13,9 @@ module.exports = ({ knexpg }) => {
       .returning("*")
       .get(0);
 
-  const retrieveAccounts = () => knexpg("accounts").where({ deleted_at: null });
+  this.retrieveAccounts = () => knexpg("accounts").where({ deleted_at: null });
 
-  const retrieveAccountById = account_id =>
+  this.retrieveAccountById = account_id =>
     knexpg("accounts")
       .where({
         id: account_id,
@@ -23,7 +23,7 @@ module.exports = ({ knexpg }) => {
       })
       .first();
 
-  const retrieveAccountByEmail = email =>
+  this.retrieveAccountByEmail = email =>
     knexpg("accounts")
       .where({
         email,
@@ -31,7 +31,7 @@ module.exports = ({ knexpg }) => {
       })
       .first();
 
-  const retrieveAccountByPhoneNumber = phone_number =>
+  this.retrieveAccountByPhoneNumber = phone_number =>
     knexpg("accounts")
       .where({
         phone_number,
@@ -39,10 +39,7 @@ module.exports = ({ knexpg }) => {
       })
       .first();
 
-  const verifyIfAccountExistsByEmailAndPhoneNumber = ({
-    email,
-    phone_number
-  }) =>
+  this.verifyIfAccountExistsByEmailAndPhoneNumber = ({ email, phone_number }) =>
     knexpg("accounts")
       .where({
         phone_number,
@@ -53,14 +50,4 @@ module.exports = ({ knexpg }) => {
         deleted_at: null
       })
       .first();
-
-  return {
-    createAccount,
-    retrieveAccounts,
-    retrieveAccountById,
-    retrieveAccountByPhoneNumber,
-    retrieveAccountByEmail,
-    verifyIfAccountExistsById: retrieveAccountById,
-    verifyIfAccountExistsByEmailAndPhoneNumber
-  };
 };

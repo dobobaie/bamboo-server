@@ -1,12 +1,11 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-
 const fs = require("fs");
 
 const privateKey = fs.readFileSync(`${__dirname}/../pem/private.key`);
 
-module.exports = ({ config, orm }) => () => {
-  const createUser = async ({
+module.exports = function Users({ config, orm }) {
+  this.createUser = () => async ({
     first_name,
     last_name,
     email,
@@ -36,22 +35,22 @@ module.exports = ({ config, orm }) => () => {
     });
   };
 
-  const retrieveUserById = async user_id =>
-    await orm.users.retrieveUserById(user_id);
+  this.retrieveUserById = () => async user_id =>
+    orm.users.retrieveUserById(user_id);
 
-  const updateUserById = async (user_id, payload) => {
+  this.updateUserById = () => async (user_id, payload) => {
     if (Object.keys(payload).length !== 0) {
       await orm.users.updateUserById(user_id, payload);
     }
   };
 
-  const deleteUserById = async user_id => {
+  this.deleteUserById = () => async user_id => {
     await orm.users.deleteUserById(user_id);
   };
 
-  const retrieveAllUsers = async () => await orm.users.retrieveUsers();
+  this.retrieveAllUsers = () => async () => orm.users.retrieveUsers();
 
-  const loginUser = async ({ email, password }) => {
+  this.loginUser = () => async ({ email, password }) => {
     const account = await orm.accounts.retrieveAccountByEmail(email);
     if (!account) {
       throw new Error("user_does_not_exist");
@@ -91,14 +90,5 @@ module.exports = ({ config, orm }) => () => {
     return {
       access_token
     };
-  };
-
-  return {
-    createUser,
-    retrieveUserById,
-    updateUserById,
-    deleteUserById,
-    retrieveAllUsers,
-    loginUser
   };
 };

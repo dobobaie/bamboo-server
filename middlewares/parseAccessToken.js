@@ -6,6 +6,7 @@ const publicKey = fs.readFileSync(`${__dirname}/../pem/public.key`);
 module.exports = ({ orm }) => async (ctx, next) => {
   const access_token = ctx.query.access_token || ctx.headers.authorization;
   if (!access_token) {
+    // eslint-disable-next-line
     return await next();
   }
 
@@ -41,5 +42,6 @@ module.exports = ({ orm }) => async (ctx, next) => {
     //
   }
 
+  // eslint-disable-next-line
   return await next();
 };

@@ -3,8 +3,9 @@ module.exports = ({ products }) => router =>
     .post(
       "/create",
       async (ctx, next) =>
+        // eslint-disable-next-line
         await next(
-          await products(ctx).createProduct(
+          await products.createProduct(ctx)(
             ctx.authParams.user_id,
             ctx.request.fields
           )
@@ -13,15 +14,17 @@ module.exports = ({ products }) => router =>
     .get(
       "/list",
       async (ctx, next) =>
+        // eslint-disable-next-line
         await next({
-          list: await products(ctx).retrieveAllProducts()
+          list: await products.retrieveAllProducts(ctx)()
         })
     )
     .get(
       "/:product_id",
       async (ctx, next) =>
+        // eslint-disable-next-line
         await next({
-          product: await products(ctx).retrieveProductById(
+          product: await products.retrieveProductById(ctx)(
             ctx.params.product_id
           )
         })
@@ -29,8 +32,9 @@ module.exports = ({ products }) => router =>
     .put(
       "/:product_id",
       async (ctx, next) =>
+        // eslint-disable-next-line
         await next(
-          await products(ctx).updateProductById(
+          await products.updateProductById(ctx)(
             ctx.params.product_id,
             ctx.request.fields
           )
@@ -39,5 +43,6 @@ module.exports = ({ products }) => router =>
     .delete(
       "/:product_id",
       async (ctx, next) =>
-        await next(await products(ctx).deleteProductById(ctx.params.product_id))
+        // eslint-disable-next-line
+        await next(await products.deleteProductById(ctx)(ctx.params.product_id))
     );

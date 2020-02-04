@@ -1,7 +1,7 @@
-module.exports = ({ orm }) => ctx => {
-  const createContract = async (user_id, { product_id }) => {
+module.exports = function Contracts({ orm }) {
+  this.createContract = ({ authParams }) => async (user_id, { product_id }) => {
     const contract = await orm.contracts.retrieveContractByProductId(
-      ctx.authParams.adminOrUserId
+      authParams.adminOrUserId
     )(product_id);
     if (contract) {
       throw new Error("product_id_have_already_a_contract");
@@ -13,40 +13,33 @@ module.exports = ({ orm }) => ctx => {
     });
   };
 
-  const retrieveAllContracts = async () =>
-    await orm.contracts.retrieveContracts(ctx.authParams.adminOrUserId);
+  this.retrieveAllContracts = ({ authParams }) => async () =>
+    orm.contracts.retrieveContracts(authParams.adminOrUserId);
 
-  const retrieveContractById = async contract_id =>
-    await orm.contracts.retrieveContractById(ctx.authParams.adminOrUserId)(
-      contract_id
-    );
+  this.retrieveContractById = ({ authParams }) => async contract_id =>
+    orm.contracts.retrieveContractById(authParams.adminOrUserId)(contract_id);
 
-  const retrieveContractsNameByKeyword = async keyword =>
+  this.retrieveContractsNameByKeyword = ({ authParams }) => async keyword => {
     await orm.contracts.retrieveContractsNameByKeyword(
-      ctx.authParams.adminOrUserId
+      authParams.adminOrUserId
     )(keyword);
+  };
 
-  const updateContractById = async (contract_id, payload) => {
+  this.updateContractById = ({ authParams }) => async (
+    contract_id,
+    payload
+  ) => {
     if (Object.keys(payload).length !== 0) {
-      await orm.contracts.updateContractById(ctx.authParams.adminOrUserId)(
+      await orm.contracts.updateContractById(authParams.adminOrUserId)(
         contract_id,
         payload
       );
     }
   };
 
-  const deleteContractById = async contract_id => {
-    await orm.contracts.deleteContractById(ctx.authParams.adminOrUserId)(
+  this.deleteContractById = ({ authParams }) => async contract_id => {
+    await orm.contracts.deleteContractById(authParams.adminOrUserId)(
       contract_id
     );
-  };
-
-  return {
-    createContract,
-    retrieveAllContracts,
-    retrieveContractsNameByKeyword,
-    retrieveContractById,
-    updateContractById,
-    deleteContractById
   };
 };

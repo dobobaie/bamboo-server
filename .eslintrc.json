@@ -5,7 +5,6 @@
     "prettier/prettier": "error",
     "import/no-unresolved": "off",
     "no-bitwise": "off",
-    "camelcase": "off",
-    "no-return-await": "off"
+    "camelcase": "off"
   }
 }

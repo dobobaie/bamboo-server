@@ -15,35 +15,40 @@ module.exports = ({ users }) => router =>
     .post(
       "/create",
       async (ctx, next) =>
-        await next(await users(ctx).createUser(ctx.request.fields))
+        // eslint-disable-next-line
+        await next(await users.createUser(ctx)(ctx.request.fields))
     )
     .get(
       "/list",
       mustAdmin(),
       async (ctx, next) =>
+        // eslint-disable-next-line
         await next({
-          list: await users(ctx).retrieveAllUsers()
+          list: await users.retrieveAllUsers(ctx)()
         })
     )
     .post(
       "/login",
       async (ctx, next) =>
-        await next(await users(ctx).loginUser(ctx.request.fields))
+        // eslint-disable-next-line
+        await next(await users.loginUser(ctx)(ctx.request.fields))
     )
     .get(
       "/:user_id",
       mustUserIdOrAdmin(),
       async (ctx, next) =>
+        // eslint-disable-next-line
         await next({
-          user: await users(ctx).retrieveUserById(ctx.params.user_id)
+          user: await users.retrieveUserById(ctx)(ctx.params.user_id)
         })
     )
     .put(
       "/:user_id",
       mustUserIdOrAdmin(),
       async (ctx, next) =>
+        // eslint-disable-next-line
         await next(
-          await users(ctx).updateUserById(
+          await users.updateUserById(ctx)(
             ctx.params.user_id,
             ctx.request.fields
           )
@@ -53,5 +58,6 @@ module.exports = ({ users }) => router =>
       "/:user_id",
       mustUserIdOrAdmin(),
       async (ctx, next) =>
-        await next(await users(ctx).deleteUserById(ctx.params.user_id))
+        // eslint-disable-next-line
+        await next(await users.deleteUserById(ctx)(ctx.params.user_id))
     );

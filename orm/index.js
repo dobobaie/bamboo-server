@@ -1,11 +1,11 @@
-const accounts = require("./accounts");
-const users = require("./users");
-const products = require("./products");
-const contracts = require("./contracts");
+const Accounts = require("./accounts");
+const Users = require("./users");
+const Products = require("./products");
+const Contracts = require("./contracts");
 
 module.exports = (...args) => ({
-  accounts: accounts(...args),
-  users: users(...args),
-  products: products(...args),
-  contracts: contracts(...args)
+  accounts: new Accounts(...args),
+  users: new Users(...args),
+  products: new Products(...args),
+  contracts: new Contracts(...args)
 });

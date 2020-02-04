@@ -9,8 +9,8 @@ const assign = (adminOrUserId, obj) => {
   return object;
 };
 
-module.exports = ({ knexpg }) => {
-  const createProduct = ({ user_id, name, estimated_price }) =>
+module.exports = function Products({ knexpg }) {
+  this.createProduct = ({ user_id, name, estimated_price }) =>
     knexpg("products")
       .insert({
         id: shortid.generate(),
@@ -21,14 +21,14 @@ module.exports = ({ knexpg }) => {
       .returning("*")
       .get(0);
 
-  const retrieveProducts = adminOrUserId =>
+  this.retrieveProducts = adminOrUserId =>
     knexpg("products").where(
       assign(adminOrUserId, {
         deleted_at: null
       })
     );
 
-  const retrieveProductById = adminOrUserId => id =>
+  this.retrieveProductById = adminOrUserId => id =>
     knexpg("products")
       .where(
         assign(adminOrUserId, {
@@ -38,7 +38,7 @@ module.exports = ({ knexpg }) => {
       )
       .first();
 
-  const updateProductById = adminOrUserId => (id, { name, estimated_price }) =>
+  this.updateProductById = adminOrUserId => (id, { name, estimated_price }) =>
     knexpg("products")
       .where(
         assign(adminOrUserId, {
@@ -53,7 +53,7 @@ module.exports = ({ knexpg }) => {
       .returning("*")
       .get(0);
 
-  const deleteProductById = adminOrUserId => id =>
+  this.deleteProductById = adminOrUserId => id =>
     knexpg("products")
       .where(assign(adminOrUserId, { id }))
       .update({
@@ -61,12 +61,4 @@ module.exports = ({ knexpg }) => {
       })
       .returning("*")
       .get(0);
-
-  return {
-    createProduct,
-    retrieveProducts,
-    retrieveProductById,
-    updateProductById,
-    deleteProductById
-  };
 };

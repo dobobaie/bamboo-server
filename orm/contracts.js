@@ -9,8 +9,8 @@ const assign = (adminOrUserId, obj) => {
   return object;
 };
 
-module.exports = ({ knexpg }) => {
-  const createContract = ({ user_id, product_id, price }) =>
+module.exports = function Contracts({ knexpg }) {
+  this.createContract = ({ user_id, product_id, price }) =>
     knexpg("contracts")
       .insert({
         id: shortid.generate(),
@@ -21,7 +21,7 @@ module.exports = ({ knexpg }) => {
       .returning("*")
       .get(0);
 
-  const retrieveContracts = adminOrUserId =>
+  this.retrieveContracts = adminOrUserId =>
     knexpg("contracts")
       .select(knexpg.raw("*, contracts.id AS id"))
       .innerJoin("products", "contracts.product_id", "=", "products.id")
@@ -31,7 +31,7 @@ module.exports = ({ knexpg }) => {
         })
       );
 
-  const retrieveContractById = adminOrUserId => id =>
+  this.retrieveContractById = adminOrUserId => id =>
     knexpg("contracts")
       .select(knexpg.raw("*, contracts.id AS id"))
       .innerJoin("products", "contracts.product_id", "=", "products.id")
@@ -43,7 +43,7 @@ module.exports = ({ knexpg }) => {
       )
       .first();
 
-  const retrieveContractByProductId = adminOrUserId => product_id =>
+  this.retrieveContractByProductId = adminOrUserId => product_id =>
     knexpg("contracts")
       .select(knexpg.raw("*, contracts.id AS id"))
       .innerJoin("products", "contracts.product_id", "=", "products.id")
@@ -55,7 +55,7 @@ module.exports = ({ knexpg }) => {
       )
       .first();
 
-  const retrieveContractsNameByKeyword = adminOrUserId => keyword =>
+  this.retrieveContractsNameByKeyword = adminOrUserId => keyword =>
     knexpg("contracts")
       .select(knexpg.raw("*, contracts.id AS id"))
       .innerJoin("products", "contracts.product_id", "=", "products.id")
@@ -66,7 +66,7 @@ module.exports = ({ knexpg }) => {
       )
       .andWhere("products.name", "like", `%${keyword}%`);
 
-  const updateContractById = adminOrUserId => (id, { product_id }) =>
+  this.updateContractById = adminOrUserId => (id, { product_id }) =>
     knexpg("contracts")
       .where(
         assign(adminOrUserId, {
@@ -80,7 +80,7 @@ module.exports = ({ knexpg }) => {
       .returning("*")
       .get(0);
 
-  const deleteContractById = adminOrUserId => id =>
+  this.deleteContractById = adminOrUserId => id =>
     knexpg("contracts")
       .where(assign(adminOrUserId, { id }))
       .update({
@@ -88,14 +88,4 @@ module.exports = ({ knexpg }) => {
       })
       .returning("*")
       .get(0);
-
-  return {
-    createContract,
-    retrieveContracts,
-    retrieveContractById,
-    retrieveContractByProductId,
-    retrieveContractsNameByKeyword,
-    updateContractById,
-    deleteContractById
-  };
 };
