@@ -23,6 +23,8 @@ module.exports = function Accounts({ knexpg }) {
       })
       .first();
 
+  this.verifyIfAccountExistsById = this.retrieveAccountById;
+
   this.retrieveAccountByEmail = email =>
     knexpg("accounts")
       .where({
