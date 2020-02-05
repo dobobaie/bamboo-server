@@ -13,6 +13,7 @@ COPY models models
 COPY modules modules
 COPY orm orm
 COPY routes routes
+COPY pem pem
 
 COPY index.js server.js ./
 

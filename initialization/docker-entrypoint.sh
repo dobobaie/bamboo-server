@@ -1,5 +1,5 @@
 #!/bin/bash
 
-node docker-entrypoint.js
+node initialization/docker-entrypoint.js
 
 exec "$@"

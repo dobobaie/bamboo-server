@@ -8,8 +8,9 @@ Bamboo server is the official rest API of the Bamboo project.
 
 ### Environment variables
 
-The JSON format bellow must be filled and saved at the root of the repository as `.env` file.  
+Tne environment variables bellow must be saved at the root of the repository as `.env` file.  
 
+JSON format
 ```
 {
   "NODE_ENV": "production",
@@ -25,25 +26,67 @@ The JSON format bellow must be filled and saved at the root of the repository as
 
 ```
 
+Ini format
+```
+NODE_ENV=production
+SERVER_IP=___
+SERVER_PORT=5656
+LOCALE=fr
+ACCESS_TOKEN=___
+POSTGRES_URL=___
+POSTGRES_DB=___
+POSTGRES_USER=___
+POSTGRES_PASSWORD=___
+```
+
 ### Generate public and private keys
 
 First, you have to create `pem` directory.  
 Then, follow the instructions in this url: [How generate public and private keys](https://gist.github.com/ygotthilf/baa58da5c3dd1f69fae9).  
 The last step is obviously to move the files in `pem` directory and to rename `jwtRS256.key` to `private.key` and `jwtRS256.key.pub` to `public.key`.   
 
-### SQL initialization
+## ⚙️ Run the project with Docker
 
-If you have docker then everything is fine there is a `Dockerfile` !   
-Else you have to go in `initialization` directory and run the `docker-entrypoint.sh` file.   
-
-## ⚙️ Run the project
-
-To run the project please follow the instructions bellow.   
+### Verify if the repository have the latest version
 
 ```
 git fetch && git pull --rebase // update your repository
-npm install // install the last packages
-node index.js // run the project (don't forget the environment part => run it with docker or set the .env file in your local environment)
+```
+
+### Build the docker image
+
+Not required but it's a good practice.  
+
+```
+docker build -t bamboo_server_image .
+```
+
+### Run it !
+
+```
+docker run -d -p 5656:5656 --env-file .env --name bamboo_server bamboo_server_image
+```
+
+## ⚙️ Run the project without Docker
+
+### Verify if the repository have the latest version
+```
+git fetch && git pull --rebase // update your repository
+```
+
+### Set the environment variables in your environment
+
+...
+
+### SQL initialization
+
+You have to go in `initialization` directory and run the `docker-entrypoint.sh` file. 
+
+### Run the project
+
+```
+npm install
+node index.js
 ```
 
 ## ❓️ The project is working ?
